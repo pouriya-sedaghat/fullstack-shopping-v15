@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    overflow: auto !important;
+    padding: 0 !important;
+  }
+}
+
+@layer components {
+  .container-fluid {
+    @apply w-full px-4 py-2.5 bg-neutral-800 text-white;
+  }
+  .btn {
+    @apply px-2 py-1 rounded-md;
+  }
+}
