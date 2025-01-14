@@ -11,7 +11,7 @@ import bcrypt from "bcryptjs";
 import { AuthOptions, User as T } from "next-auth";
 
 export const authOptions: AuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
   },
@@ -80,6 +80,6 @@ export const authOptions: AuthOptions = {
   // },
 };
 
-const handler = NextAuth(authOptions);
+const handlers = NextAuth(authOptions);
 
-export { handler as GET, handler as POST };
+export { handlers as GET, handlers as POST };
