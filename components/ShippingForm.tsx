@@ -31,7 +31,7 @@ function ShippingForm() {
     dispatch,
   } = useContext(CartContext);
 
-  const { push } = useRouter();
+  const router = useRouter();
 
   const submitHandler: SubmitHandler<ShippingData> = ({
     fullName,
@@ -44,7 +44,7 @@ function ShippingForm() {
 
     toast.success("Shipping Data Added.");
 
-    push("/payment-method");
+    router.push("/payment-method");
   };
 
   useEffect(() => {

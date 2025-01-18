@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 function PaymentMethodForm() {
   const methods = ["Gateway", "Offline Payment"];
 
-  const [selectedMethod, setSelectedMethod] = useState("Gateway");
+  const [selectedMethod, setSelectedMethod] = useState<string>("Gateway");
 
   const {
     state: {

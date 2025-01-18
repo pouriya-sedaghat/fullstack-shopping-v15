@@ -8,6 +8,8 @@ import CartItem from "@/components/CartItem";
 
 import { useRouter } from "next/navigation";
 
+import dynamic from "next/dynamic";
+
 function Cart() {
   const {
     state: {
@@ -45,4 +47,4 @@ function Cart() {
   );
 }
 
-export default Cart;
+export default dynamic(() => Promise.resolve(Cart), { ssr: false });

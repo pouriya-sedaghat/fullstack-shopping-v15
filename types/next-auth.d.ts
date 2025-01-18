@@ -10,7 +10,6 @@ declare module "next-auth" {
       _id: mongoose.Schema.Types.ObjectId;
       username: string;
       email: string;
-      password: string;
       isAdmin: boolean;
     };
   }
@@ -29,7 +28,6 @@ declare module "next-auth/jwt" {
     _id: mongoose.Schema.Types.ObjectId;
     username: string;
     email: string;
-    password: string;
     isAdmin: boolean;
   }
 }

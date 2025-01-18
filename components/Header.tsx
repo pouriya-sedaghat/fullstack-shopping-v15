@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { CartContext } from "@/context/Cart";
 
@@ -12,7 +12,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 import DropDown from "./DropDown";
 
-import { Cookies } from "typescript-cookie";
+import Cookies from "js-cookie";
 
 function Header() {
   const {
@@ -21,6 +21,8 @@ function Header() {
     },
   } = useContext(CartContext);
 
+  const [cartItemsCount, setCartItemsCount] = useState(0);
+
   const { status, data: session } = useSession();
 
   function signOutHandler() {
@@ -28,6 +30,10 @@ function Header() {
 
     signOut({ callbackUrl: "/login" });
   }
+
+  useEffect(() => {
+    setCartItemsCount(cartItems.reduce((acc, cur) => acc + cur.quantity!, 0));
+  }, [cartItems]);
 
   return (
     <header className="container-fluid">
@@ -40,7 +46,7 @@ function Header() {
             <Link href="/cart">
               Cart{" "}
               <span className="rounded-md bg-gray-50 px-2 py-1 text-xs text-neutral-800">
-                {cartItems.reduce((acc, cur) => acc + cur.quantity!, 0)}
+                {cartItemsCount}
               </span>
             </Link>{" "}
           </li>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { CartContext } from "@/context/Cart";
 
@@ -8,9 +8,12 @@ import Image from "next/image";
 
 import { useRouter } from "next/navigation";
 
-import { Cookies } from "typescript-cookie";
+import Cookies from "js-cookie";
 
 import { toast } from "react-toastify";
+import { Product } from "@/interface/Product";
+import { ShippingData } from "@/interface/ShippingData";
+import { PaymentMethod } from "@/types/PaymentMethod";
 
 function PlaceOrderDetails() {
   const {
@@ -18,6 +21,16 @@ function PlaceOrderDetails() {
       cart: { cartItems, shippingData, paymentMethod },
     },
   } = useContext(CartContext);
+
+  const [cart, setCart] = useState<{
+    cartItems: Product[];
+    shippingData: ShippingData;
+    paymentMethod: PaymentMethod;
+  }>({
+    cartItems: [],
+    shippingData: { fullName: "", postalCode: "", address: "" },
+    paymentMethod: "",
+  });
 
   const router = useRouter();
 
@@ -50,6 +63,10 @@ function PlaceOrderDetails() {
     router.push("/completed-order");
   }
 
+  useEffect(() => {
+    setCart({ cartItems, shippingData, paymentMethod });
+  }, [cartItems, shippingData, paymentMethod]);
+
   return (
     <div className="grid grid-cols-[4fr,1fr] gap-x-4">
       <div className="space-y-4 bg-slate-200 p-5 rounded-md">
@@ -65,9 +82,9 @@ function PlaceOrderDetails() {
             </thead>
             <tbody>
               <tr className="bg-gray-800 hover:bg-gray-600 transition-all">
-                <td className="py-4">{shippingData.fullName}</td>
-                <td className="py-4">{shippingData.postalCode}</td>
-                <td className="py-4">{shippingData.address}</td>
+                <td className="py-4">{cart.shippingData.fullName}</td>
+                <td className="py-4">{cart.shippingData.postalCode}</td>
+                <td className="py-4">{cart.shippingData.address}</td>
               </tr>
             </tbody>
           </table>
@@ -88,7 +105,7 @@ function PlaceOrderDetails() {
             </thead>
             <tbody>
               <tr className="bg-gray-800 hover:bg-gray-600 transition-all">
-                <td className="py-4">{paymentMethod}</td>
+                <td className="py-4">{cart.paymentMethod}</td>
               </tr>
             </tbody>
           </table>
@@ -112,7 +129,7 @@ function PlaceOrderDetails() {
               </tr>
             </thead>
             <tbody>
-              {cartItems.map((item, index) => (
+              {cart.cartItems.map((item, index) => (
                 <tr
                   key={item._id as string}
                   className="border-b bg-gray-800 border-gray-700 hover:bg-gray-600 transition-all"
@@ -131,8 +148,8 @@ function PlaceOrderDetails() {
                   <td>{item.price.toLocaleString()} IRR</td>
                   <td>{(item.quantity! * item.price).toLocaleString()} IRR</td>
                   {index === 0 && (
-                    <td rowSpan={cartItems.length}>
-                      {cartItems
+                    <td rowSpan={cart.cartItems.length}>
+                      {cart.cartItems
                         .reduce(
                           (acc, cur) => acc + cur.quantity! * cur.price,
                           0

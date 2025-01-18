@@ -12,7 +12,7 @@ async function Home() {
   return (
     <div className="grid grid-cols-4 justify-items-center gap-5 w-fit mx-auto">
       {products.map((item) => (
-        <ProductItem product={item} key={item._id as string} />
+        <ProductItem product={item} key={item._id} />
       ))}
     </div>
   );

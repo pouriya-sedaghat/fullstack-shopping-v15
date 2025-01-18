@@ -1,6 +1,12 @@
-import { getServerSession } from "next-auth";
+// NextAuth Version 4
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+// import { getServerSession } from "next-auth";
+
+// import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+// NextAuth Version 5 (Beta 25)
+
+import { auth } from "@/auth";
 
 import { redirect } from "next/navigation";
 
@@ -21,9 +27,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function Users() {
-  const session = await getServerSession(authOptions);
+  // NextAuth Version 4
 
-  if (!session?.user || !session?.user.isAdmin) redirect("/access-denied");
+  // const session = await getServerSession(authOptions);
+
+  // NextAuth Version 5 (Beta 25)
+
+  const session = await auth();
+
+  if (!session?.user || !session?.user.isAdmin) redirect("/unauthorized");
 
   const users: User[] = await service.getUsersHandler();
 
@@ -44,7 +56,7 @@ async function Users() {
             <tbody>
               {users.map((item) => (
                 <tr
-                  key={item._id as string}
+                  key={item._id}
                   className="border-b border-gray-700 bg-gray-800 hover:bg-gray-600 transition-all"
                 >
                   <td className="px-6 py-4">{item.username}</td>

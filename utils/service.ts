@@ -15,25 +15,19 @@ import { Order as OT } from "@/interface/Order";
 async function getProductsHandler(): Promise<PT[]> {
   await db.connect();
 
-  return (await Product.find().lean<PT[]>()).map((item) =>
-    db.convertToObject(item)
-  ) as PT[];
+  return (await Product.find().lean()).map(db.convertToObject as () => PT);
 }
 
 async function getUsersHandler(): Promise<UT[]> {
   await db.connect();
 
-  return (await User.find().lean<UT[]>()).map((item) =>
-    db.convertToObject(item)
-  ) as UT[];
+  return (await User.find().lean()).map(db.convertToObject as () => UT);
 }
 
 async function getOrdersHandler(): Promise<OT[]> {
   await db.connect();
 
-  return (await Order.find().lean<OT[]>()).map((item) =>
-    db.convertToObject(item)
-  ) as OT[];
+  return (await Order.find().lean()).map(db.convertToObject as () => OT);
 }
 
 const service = { getProductsHandler, getUsersHandler, getOrdersHandler };

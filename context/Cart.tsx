@@ -26,7 +26,7 @@ type CartContext = { state: State; dispatch: Dispatch };
 
 import { createContext, useReducer } from "react";
 
-import { Cookies } from "typescript-cookie";
+import Cookies from "js-cookie";
 
 export const CartContext = createContext({} as CartContext);
 
@@ -86,6 +86,8 @@ function reducer(state: State, action: Action): State {
         const shippingData = action.payload;
 
         Cookies.set("cart", JSON.stringify({ ...state.cart, shippingData }));
+
+        console.log(JSON.parse(Cookies.get("cart") as string));
 
         return { ...state, cart: { ...state.cart, shippingData } };
       }

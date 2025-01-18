@@ -1,6 +1,12 @@
-import { getServerSession } from "next-auth";
+// NextAuth Version 4
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+// import { getServerSession } from "next-auth";
+
+// import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+// NextAuth Version 5 (Beta 25)
+
+import { auth } from "@/auth";
 
 import { redirect } from "next/navigation";
 
@@ -23,9 +29,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function Dashboard() {
-  const session = await getServerSession(authOptions);
+  // NextAuth Version 4
 
-  if (!session?.user || !session?.user.isAdmin) redirect("/access-denied");
+  // const session = await getServerSession(authOptions);
+
+  // NextAuth Version 5 (Beta 25)
+
+  const session = await auth();
+
+  if (!session?.user || !session?.user.isAdmin) redirect("/unauthorized");
 
   await db.connect();
 

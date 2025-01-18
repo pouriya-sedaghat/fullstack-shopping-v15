@@ -8,7 +8,21 @@ import App from "@/layout/App";
 
 import { CartContextProvider } from "@/context/Cart";
 
-import SessionProvider from "@/components/SessionProvider";
+// import SessionProvider from "@/components/SessionProvider";
+
+// NextAuth Version 4
+
+// import { SessionProvider } from "next-auth/react";
+
+// import { getServerSession } from "next-auth";
+
+// import { authOptions } from "./api/auth/[...nextauth]/route";
+
+// NextAuth Version 5 (Beta 25)
+
+import { SessionProvider } from "next-auth/react";
+
+import { auth } from "@/auth";
 
 import React from "react";
 
@@ -26,14 +40,24 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // NextAuth Version 4
+
+  // const session = await getServerSession(authOptions);
+
+  // NextAuth Version 5 (Beta 25)
+
+  const session = await auth();
+
   return (
     <html lang="en">
       <body className={`${PhilosopherFont.className}`}>
-        <SessionProvider>
+        {/* <SessionProvider> */}
+        <SessionProvider session={session}>
           <CartContextProvider>
             <App>{children}</App>
           </CartContextProvider>
         </SessionProvider>
+        {/* </SessionProvider> */}
       </body>
     </html>
   );

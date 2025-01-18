@@ -2,9 +2,15 @@ import db from "@/utils/db";
 
 import Order from "@/models/order.model";
 
-import { getServerSession } from "next-auth";
+// NextAuth Version 4
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+// import { getServerSession } from "next-auth";
+
+// import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+// NextAuth Version 5 (Beta 25)
+
+import { auth } from "@/auth";
 
 import { redirect } from "next/navigation";
 
@@ -12,14 +18,22 @@ import { Order as T } from "@/interface/Order";
 
 import Auth from "@/components/Auth";
 
+import { Fragment } from "react";
+
 async function OrderHistory() {
-  const session = await getServerSession(authOptions);
+  // NextAuth Version 5 (Beta 25)
+
+  // const session = await getServerSession(authOptions);
+
+  // NextAuth Version 5 (Beta 25)
+
+  const session = await auth();
 
   if (!session?.user) redirect("/access-denied");
 
   await db.connect();
 
-  const orders: T[] = await Order.find({ user: session.user._id });
+  const orders: T[] = await Order.find({ user: session.user._id }).lean();
 
   return (
     <Auth>
@@ -36,10 +50,10 @@ async function OrderHistory() {
           </thead>
           <tbody>
             {orders.map((item, index) => (
-              <>
-                {item.orderItems.map((oItem, oIndex) => (
+              <Fragment key={item._id}>
+                {item.orderItems.map((oItem) => (
                   <tr
-                    key={oIndex.toString()}
+                    key={oItem._id?.toString()}
                     className={`border-b border-gray-700 ${
                       index % 2 === 0
                         ? "bg-zinc-800 hover:bg-zinc-600"
@@ -54,7 +68,7 @@ async function OrderHistory() {
                     </td>
                   </tr>
                 ))}
-              </>
+              </Fragment>
             ))}
           </tbody>
         </table>

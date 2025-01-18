@@ -10,7 +10,7 @@ function Auth({ children }: { children: React.ReactNode }) {
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/access-denied");
+      router.push("/unauthorized");
     },
   });
 
